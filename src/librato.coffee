@@ -16,15 +16,15 @@ librato.configure = (newConfig) ->
 
 librato.increment = (name, value = 1, opts={}) ->
   (opts = value; value = 1)  if value is Object(value)
-  collector.increment "#{config.prefix ? ''}#{format_key(name, opts.source)}",
+  collector.increment "#{config.prefix ? ''}#{format_key(name, opts.source, opts.measure_time)}",
                       value
 
 librato.measure = (name, value, opts={}) ->
-  collector.measure "#{config.prefix ? ''}#{format_key(name, opts.source)}", value
+  collector.measure "#{config.prefix ? ''}#{format_key(name, opts.source, opts.measure_time)}", value
 
 librato.timing = (name, fn, opts={}, cb) ->
   [opts, cb] = [{}, opts] if !cb? and typeof opts is 'function'
-  collector.timing "#{config.prefix ? ''}#{format_key(name, opts.source)}", fn, cb
+  collector.timing "#{config.prefix ? ''}#{format_key(name, opts.source, opts.measure_time)}", fn, cb
 
 librato.start = ->
   worker.start()
@@ -51,8 +51,8 @@ librato.middleware = middleware(librato)
 
 module.exports = librato
 
-format_key = (name, source) ->
-  if source? then "#{sanitize_name(name)};#{source}"
+format_key = (name, source, measure_time) ->
+  if source? then "#{sanitize_name(name)};#{source};#{measure_time}"
   else sanitize_name(name)
 
 # from the official librato statsd backend

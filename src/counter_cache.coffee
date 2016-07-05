@@ -5,8 +5,12 @@ class CounterCache
 
   flushTo: (queue) ->
     for key, value of @cache
-      [name, source] = key.split ';'
-      queue.push unless source? then {name, value} else {name, value, source}
+      [name, source, measure_time] = key.split ';'
+      
+      obj = {name, value}
+      obj.source = source if source?
+      obj.measure_time = measure_time if measure_time?
+      queue.push obj
 
   increment: (name, value=1) ->
     @cache[name] ?= 0

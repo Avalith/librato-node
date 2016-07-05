@@ -26,7 +26,7 @@ describe 'librato', ->
 
     it 'accepts a custom source', ->
       librato.increment('messages', {source: 'source1'})
-      expect(Collector::increment).to.have.been.calledWith 'messages;source1', 1
+      expect(Collector::increment).to.have.been.calledWith 'messages;source1;undefined', 1
 
   describe '::timing', ->
     beforeEach ->

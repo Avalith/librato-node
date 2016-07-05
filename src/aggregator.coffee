@@ -7,7 +7,7 @@ class Aggregator
 
   flushTo: (queue) ->
     for key, state of @cache
-      [name, source] = key.split ';'
+      [name, source, measure_time] = key.split ';'
 
       if state.count > 1
         obj = state
@@ -16,6 +16,7 @@ class Aggregator
 
       obj.name = name
       obj.source = source if source?
+      obj.measure_time = measure_time if measure_time?
       queue.push obj
 
       delete @cache[key]
